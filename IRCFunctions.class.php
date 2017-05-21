@@ -6,7 +6,7 @@ class IRCFunctions extends IRC
 public function JoinChannel($channel,$socket=NULL)
 {
  if($socket == NULL) $socket = $this->socket;
- $this->sendCommand("JOIN","#ru");
+ $this->sendCommand("JOIN",$channel);
 }
 
 public function WriteToChannel($channel,$msg)
