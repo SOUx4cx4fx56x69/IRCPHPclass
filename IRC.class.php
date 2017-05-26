@@ -14,7 +14,7 @@ protected function timer($seconds,$function)
 public function __construct()
 {
  $this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP) or die("Not can create a socket<br>");
- socket_set_block($this->socket) or die("Not can socket_set_block<br>");//sory for nonblock. before. will i primate...
+ socket_set_nonblock($this->socket) or die("not can set nonblock on socket<br>");
 }
 private function pingPong($maxtry=5)
 {
@@ -45,6 +45,7 @@ public function connect($host,$port,$nick,$username,$realname,$maxGetPing=5)
  $this->write("NICK ".$nick);
  $this->write("USER ".$username." * * ".$realname);
  if($this->pingPong() != 1) print ("Ping-pong succesfully\n");
+ socket_set_block($this->socket) or die("Not can socket_set_block<br>");//sory for nonblock. before. will i primate...
  return 1;
 }
 
