@@ -63,15 +63,14 @@ public function getSocket()
 return $this->socket;
 }
 
-public function loopRead($socket)
+public function loopRead($socket,$sleeptime=5)
 {
  $buffer = "";
  while( $buffer = $this->recv($socket) )
  {
-  $tmp = explode(" ",$buffer);
-  if($tmp[0] == "PING") $this->write("PONG");
-  $tmp = NULL;
+  if( strstr($buffer,"PING") ) $this->write("PONG");
   print $buffer;
+  sleep($sleeptime);
  }
 
 }
