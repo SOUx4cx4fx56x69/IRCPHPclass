@@ -16,7 +16,7 @@ $this->sendCommand("PRIVMSG",$channel,$msg);
 
 public function LeaveFromChannel($channel)
 {
-$this->sendCommand("LEAVE",$channel);
+$this->sendCommand("PART",$channel);
 }
 
 public function QUIT($msg="leave")
