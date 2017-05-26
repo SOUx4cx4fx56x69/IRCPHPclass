@@ -4,7 +4,8 @@ class IRC /*extends Thread*/
 protected $socket;
 private $host;
 private $port;
-
+private $pt;//pingtime
+private $tmpt;
 protected function timer($seconds,$function)
 {
 /*
@@ -15,6 +16,7 @@ public function __construct()
 {
  $this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP) or die("Not can create a socket<br>");
  socket_set_nonblock($this->socket) or die("not can set nonblock on socket<br>");
+ $this->tmpt = time();
 }
 private function pingPong($maxtry=5)
 {
@@ -63,11 +65,23 @@ public function getSocket()
 return $this->socket;
 }
 
-public function loopRead($socket)
+public function loopRead($socket,$pingsec=60)
 {
  $buffer = "";
+ $this->pt = time()+$pingtime;
  while( $buffer = $this->recv($socket) )
+ {
+/*
+  if($this->tmpt >= $this->pt)
+  {
+   $this->tmpt=time();
+   $this->write("PING");
+   $this->pt = $this->tmpt+$pingsec;
+  }
+*/
   print $buffer;
+ }
+
 }
 //...
 
@@ -76,7 +90,6 @@ protected function recv()
 {
 $string = socket_read($this->socket,4096,PHP_NORMAL_READ);
 if(!$string)die("Not can read from socket<br>");
-if( strstr($string,"PING") ) $this->write("PING");
 return $string;
 }
 
