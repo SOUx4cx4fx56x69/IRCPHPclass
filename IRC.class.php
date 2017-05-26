@@ -63,21 +63,11 @@ public function getSocket()
 return $this->socket;
 }
 
-public function loopRead($socket,$sleeptime=5)
+public function loopRead($socket)
 {
  $buffer = "";
  while( $buffer = $this->recv($socket) )
- {
- $tmp = explode(" ",$buffer);
- if($tmp[0] == "PING")
- {
-  $this->write("PONG ".$tmp[1]);
-  $tmp = NULL;
- }
   print $buffer;
-  sleep($sleeptime);
- }
-
 }
 //...
 
@@ -86,6 +76,7 @@ protected function recv()
 {
 $string = socket_read($this->socket,4096,PHP_NORMAL_READ);
 if(!$string)die("Not can read from socket<br>");
+if( strstr($string,"PING") ) $this->write("PING");
 return $string;
 }
 
