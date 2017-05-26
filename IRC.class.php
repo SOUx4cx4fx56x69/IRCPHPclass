@@ -65,22 +65,21 @@ public function getSocket()
 return $this->socket;
 }
 
-public function loopRead($socket,$pingsec=60)
+public function loopRead($socket,$pingsec=60,$sleeptime=5)
 {
  $buffer = "";
- $this->pt = time()+$pingtime;
+ $this->pt = time()+$pingsec;
  while( $buffer = $this->recv($socket) )
  {
-/*
   if($this->tmpt >= $this->pt)
   {
    $this->tmpt=time();
    $this->write("PING");
    $this->pt = $this->tmpt+$pingsec;
   }
-*/
   print $buffer;
- }
+  sleep($sleeptime); 
+ } 
 
 }
 //...
