@@ -5,7 +5,6 @@ protected $socket;
 private $host;
 private $port;
 private $pt;//pingtime
-private $tmpt;
 protected function timer($seconds,$function)
 {
 /*
@@ -15,8 +14,7 @@ protected function timer($seconds,$function)
 public function __construct()
 {
  $this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP) or die("Not can create a socket<br>");
- socket_set_nonblock($this->socket) or die("not can set nonblock on socket<br>");
- $this->tmpt = time();
+ socket_set_block($this->socket) or die("Not can socket_set_block<br>");//sory for nonblock. before. will i primate...
 }
 private function pingPong($maxtry=5)
 {
@@ -65,20 +63,19 @@ public function getSocket()
 return $this->socket;
 }
 
-public function loopRead($socket,$pingsec=30,$sleeptime=2)
+public function loopRead($socket,$pingsec=60)
 {
  $buffer = "";
  $this->pt = time()+$pingsec;
+ 
  while( $buffer = $this->recv($socket) )
  {
-  if($this->tmpt >= $this->pt)
+  if(time() >= $this->pt || strstr($buffer,"PING"))
   {
-   $this->tmpt=time();
-   $this->write("PING");
-   $this->pt = $this->tmpt+$pingsec;
+   $this->write("PONG");
+   $this->pt = time()+$pingsec;
   }
   print $buffer;
-  sleep($sleeptime); 
  } 
 
 }
