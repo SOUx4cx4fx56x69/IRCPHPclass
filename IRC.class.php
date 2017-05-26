@@ -68,7 +68,12 @@ public function loopRead($socket,$sleeptime=5)
  $buffer = "";
  while( $buffer = $this->recv($socket) )
  {
-  if( strstr($buffer,"PING") ) $this->write("PONG");
+ $tmp = explode(" ",$buffer);
+ if($tmp[0] == "PING")
+ {
+  $this->write("PONG ".$tmp[1]);
+  $tmp = NULL;
+ }
   print $buffer;
   sleep($sleeptime);
  }
