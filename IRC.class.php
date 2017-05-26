@@ -65,7 +65,7 @@ public function getSocket()
 return $this->socket;
 }
 
-public function loopRead($socket,$pingsec=60,$sleeptime=5)
+public function loopRead($socket,$pingsec=30,$sleeptime=2)
 {
  $buffer = "";
  $this->pt = time()+$pingsec;
