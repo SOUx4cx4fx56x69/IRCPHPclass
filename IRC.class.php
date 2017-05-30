@@ -5,7 +5,7 @@ protected $socket;
 private $host;
 private $port;
 private $pt;//pingtime
-private $nick;
+//private $nick;
 protected $commands;
 protected function timer($seconds,$function)
 {
@@ -50,7 +50,7 @@ public function connect($host,$port,$nick,$username,$realname,$maxGetPing=5)
  $this->write("USER ".$username." * * ".$realname);
  if($this->pingPong() != 1) print ("Ping-pong succesfully\n");
  socket_set_block($this->socket) or die("Not can socket_set_block<br>");//sory for nonblock. before. will i primate...
- $this->nick=$nick;
+ //$this->nick=$nick;
  return 1;
 }
 
