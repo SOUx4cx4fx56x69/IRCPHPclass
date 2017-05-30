@@ -112,6 +112,7 @@ return $string;
 
 public function __destruct()
 {
+$this->write("QUIT leaving.");
 socket_close($this->socket);
 }
 
