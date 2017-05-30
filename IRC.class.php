@@ -5,14 +5,18 @@ protected $socket;
 private $host;
 private $port;
 private $pt;//pingtime
+private $nick;
+protected $commands;
 protected function timer($seconds,$function)
 {
 /*
 
 */
 }
-public function __construct()
+public function __construct($commands=NULL)
 {
+ if($commands!=NULL)
+   $this->commands=$commands;
  $this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP) or die("Not can create a socket<br>");
  socket_set_nonblock($this->socket) or die("not can set nonblock on socket<br>");
 }
@@ -46,6 +50,7 @@ public function connect($host,$port,$nick,$username,$realname,$maxGetPing=5)
  $this->write("USER ".$username." * * ".$realname);
  if($this->pingPong() != 1) print ("Ping-pong succesfully\n");
  socket_set_block($this->socket) or die("Not can socket_set_block<br>");//sory for nonblock. before. will i primate...
+ $this->nick=$nick;
  return 1;
 }
 
@@ -76,6 +81,21 @@ public function loopRead($socket,$pingsec=60)
    $this->write("PONG");
    $this->pt = time()+$pingsec;
   }
+  $message = explode(" ",$buffer,4);
+if( 
+isset($message[1]) && 
+!empty($this->commands) &&
+$message[1]=="PRIVMSG"
+)
+{
+ $message[3] = mb_strtolower($message[3]);
+ foreach($this->commands as $key=>$command)
+   if( strstr($message[3],$key) )
+    {
+     $this->WriteToChannel($message[2],$this->commands[$key]);
+     break;
+    }//if strstr...
+}// ....
   print $buffer;
  } 
 
