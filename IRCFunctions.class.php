@@ -80,6 +80,14 @@ public function SetAway($msg="busy")
   $this->sendCommand("AWAY",$msg);
 }
 
+public function __call( $m, $params ){
+
+	foreach( $params as $param){
+		$m .= " ".$param;
+	}
+	$this->write($m);
+}
+
 }
 
 ?>
